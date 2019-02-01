@@ -35,6 +35,8 @@ Then create a new node pool with this service account:
 
 `gcloud container node-pools create node-pool2 --cluster=cert-test-cluster --service-account=<service-account-email>`
 
+Then just delete the old node pool in the GKE UI and wait for things to migrate
+
 ### Connect kubectl to cluster and set namespace
 
 ```
@@ -65,8 +67,6 @@ Modify deploy/ingress-demo.yaml and specify your domain name and then deploy the
 After a while (5-15min) you should be able to access http://web1.example.com, feel free to continue with the guide 
 in the meantime
 
-Then just delete the old node pool in the GKE UI and wait for things to migrate
-
 `kubectl get po -o wide # check status` 
 
 ## Deploying gke-managed-cert
@@ -76,6 +76,7 @@ date there instead of from this project but I included here fore reproducibility
 
 ```
 kubectl apply -f deploy/example1/managedcertificates-crd.yaml          # Install CRDs
+# Give yourself access to deploy cert manager, use real email 
 # Give yourself access to deploy cert manager, use real email 
 kubectl create clusterrolebinding make-me-cluster-admin --clusterrole=cluster-admin --user=email@example.org
 # Give manager cluster admin access 
