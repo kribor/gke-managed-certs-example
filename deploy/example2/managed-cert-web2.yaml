@@ -1,0 +1,7 @@
+apiVersion: gke.googleapis.com/v1alpha1
+kind: ManagedCertificate
+metadata:
+  name: web2-cert
+spec:
+  domains:
+    - web2.libertar.se

@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "tls-ingress-ip" # Requires: gcloud compute addresses create tls-ingress-ip --global
+
+spec:
+  rules:
+    - host: web1.libertar.se
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: web
+              servicePort: 8080
+
+    - host: web2.libertar.se
+      http:
+        paths:
+            - path: /
+              backend:
+                serviceName: web2
+                servicePort: 8080

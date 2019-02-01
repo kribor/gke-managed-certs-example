@@ -1,0 +1,7 @@
+apiVersion: gke.googleapis.com/v1alpha1
+kind: ManagedCertificate
+metadata:
+  name: test-cert
+spec:
+  domains:
+    - web1.libertar.se
