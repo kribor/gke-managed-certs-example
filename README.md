@@ -169,6 +169,7 @@ kubectl config set-context $(kubectl config current-context) --namespace=apps
 gcloud compute addresses create apps-ingress-ip --global                 # Request IP
 gcloud compute addresses describe apps-ingress-ip --global               # Get IP
 # Set up DNS record to web3.example.com to the IP
+# Change domain in example3 ingress and managed cert
 kubectl apply -f deploy/example3/managed-cert-3.yaml                     # Define cert to reference in ingress
 kubectl run web2 --image=gcr.io/google-samples/hello-app:2.0 --port=8080 # Create a new "web2" in apps namespace
 kubectl expose deployment web2 --target-port=8080 --type=NodePort
