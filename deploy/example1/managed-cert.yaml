@@ -4,4 +4,4 @@ metadata:
   name: test-cert
 spec:
   domains:
-    - web1.libertar.se
+    - web1.example.com

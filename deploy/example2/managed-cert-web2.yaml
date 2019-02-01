@@ -4,4 +4,4 @@ metadata:
   name: web2-cert
 spec:
   domains:
-    - web2.libertar.se
+    - web2.example.com
