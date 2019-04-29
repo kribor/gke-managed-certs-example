@@ -4,7 +4,7 @@ metadata:
   name: web3-ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: "apps-ingress-ip" # Requires: gcloud compute addresses create apps-ingress-ip --global
-    gke.googleapis.com/managed-certificates: "web3-cert"
+    networking.gke.io/managed-certificates: "web3-cert"
 spec:
   rules:
     - host: web3.example.com
