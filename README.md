@@ -94,7 +94,7 @@ kubectl apply -f deploy/example1/managed-certificate-controller.yaml   # Install
 Modify managed-cert.yaml with your domain name, then apply that and annotate the ingress
 ```
 kubectl apply -f deploy/example1/managed-cert.yaml
-kubectl annotate ingress test-ingress gke.googleapis.com/managed-certificates=test-cert 
+kubectl annotate ingress test-ingress networking.gke.io/managed-certificates=test-cert 
 ```
 
 You should se (may take some time) your ingress getting new annotations to look similar to:
@@ -158,7 +158,7 @@ kubectl expose deployment web2 --target-port=8080 --type=NodePort
 # Modify domain name in deploy/example2/managed-cert-web2.yaml
 kubectl apply -f deploy/example2/managed-cert-web2.yaml
 kubectl apply -f deploy/example2/ingress-demo-v2.yaml
-kubectl annotate ingress test-ingress gke.googleapis.com/managed-certificates=test-cert,web2-cert
+kubectl annotate ingress test-ingress networking.gke.io/managed-certificates=test-cert,web2-cert
 
 ```
 
