@@ -18,24 +18,26 @@ Tested on: v1.11.6-gke.3
 
 Create a new GKE cluster (if needed) using cloud console
 
-## Create service account for nodes and replace node pool
+## Create service account and setup kubernetes
 
-### Setting up admin API access on nodes and replacing the node pool
+### Create custom Role or use Compute Admin
 
-A note on security: This will as I understand it allow your nodes in GKE access to compute API,
-without understanding this in depth I would recommend using a separate node pool for admin services 
-such as this and running your normal workloads on a seperate one with least privilege or default access.
+For quick testing you can use "compute engine admin".
 
-Set up least privilege plus "compute engine admin", reference: https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#use_least_privilege_sa
-During role creation:
+Recommended, create custom role for creating TLS certs with access:
+```
+compute.sslCertificates.create
+compute.sslCertificates.delete
+compute.sslCertificates.get
+compute.sslCertificates.list
+```
 
-![Service account for nodes](images/create-service-account.png "Service account for nodes")
+![Screenshot of creating custom role](images/create-custom-role.png)
 
-Then create a new node pool with this service account:
+### Create a service account
 
-`gcloud container node-pools create node-pool2 --cluster=cert-test-cluster --service-account=<service-account-email>`
-
-Then just delete the old node pool in the GKE UI and wait for things to migrate
+Create a new service account and give apply the role above. 
+Create and download json key. Save as gke-managed-certs.json - to be used below.
 
 ### Connect kubectl to cluster and set namespace
 
@@ -72,14 +74,17 @@ in the meantime
 ## Deploying gke-managed-cert
 
 NOTE: yamls taken from https://github.com/GoogleCloudPlatform/gke-managed-certs. You may want to use the most up to 
-date there instead of from this project but I included here fore reproducibility 
+date there instead of from this project but I included here fore reproducibility and stability (latest sometimes broken)
+
+NOTE2: You need to modify the managed-certificate-controller.yaml to add env variable for service account and mount secret (already done if you use the yaml from example folder)
 
 ```
+kubectl create secret generic gcp-svc-acc-gke-managed-certs --from-file=/tmp/gke-managed-certs.json # File must be called "gke-managed-certs.json"
 kubectl apply -f deploy/example1/managedcertificates-crd.yaml          # Install CRDs
 # Give yourself access to deploy cert manager, use real email 
-# Give yourself access to deploy cert manager, use real email 
 kubectl create clusterrolebinding make-me-cluster-admin --clusterrole=cluster-admin --user=email@example.org
-# Give manager cluster admin access 
+# Give gke-managed-certs controller cluster admin access
+# Change namespace if deploying to another namespace
 kubectl create clusterrolebinding managed-certificate-account-cluster-admin --clusterrole=cluster-admin --user=system:serviceaccount:infra:managed-certificate-account      
 kubectl apply -f deploy/example1/managed-certificate-controller.yaml   # Install the "cert manager"
 ```

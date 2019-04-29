@@ -1,4 +1,4 @@
-apiVersion: gke.googleapis.com/v1alpha1
+apiVersion: networking.gke.io/v1beta1
 kind: ManagedCertificate
 metadata:
   name: test-cert
